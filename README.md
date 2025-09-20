@@ -1,4 +1,4 @@
-# MyProject
+
 # 📝 To-Do List App (Django)
 
 A simple but professional **To-Do List web application** built with **Django**.  
