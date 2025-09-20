@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Task
-from .models import TaskForm
+from .forms import TaskForm
 
 def task_list(request):
     filter_type = request.GET.get('filter', 'all')
@@ -25,6 +25,18 @@ def task_create(request):
     return render(request, 'tasks/task_form.html', {'form': form})
 
 def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Task updated successfully!")
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'tasks/task_form.html', {'form': form})
+
+def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
     messages.success(request, "Task deleted successfully!")
